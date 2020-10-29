@@ -16,12 +16,17 @@ public interface IUserDao {
     /*
     * 新增用户
     * */
-    public void insert(User user) throws Exception;
+    public int insert(User user) throws Exception;
 
     /*
     * 更新用户
     * */
     public int update(User user) throws Exception;
+
+    /*
+    * 根据id删除
+    * */
+    public int delete(User user) throws Exception;
 
 
 }

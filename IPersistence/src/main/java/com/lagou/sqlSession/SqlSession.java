@@ -10,8 +10,15 @@ public interface SqlSession {
     //根据条件查询单个
     public <T> T selectOne(String statementid,Object... params) throws Exception;
 
-    //新增
+    //更新
     public int update(String statementid,Object... params) throws Exception;
+
+    //新增
+    public int insert(String statementid,Object... params) throws Exception;
+
+    //删除
+    public int delete(String statementid,Object... params) throws Exception;
+
 
 
 

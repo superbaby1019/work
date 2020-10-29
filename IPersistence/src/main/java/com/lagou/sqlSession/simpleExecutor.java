@@ -123,6 +123,85 @@ public class simpleExecutor implements  Executor {
         return update;
     }
 
+    @Override
+    public int insert(Configuration configuration, MappedStatement mappedStatement, Object... params) throws Exception {
+        // 1. 注册驱动，获取连接
+        Connection connection = configuration.getDataSource().getConnection();
+
+        // 2. 获取sql语句 : update user set id = #{id} and username=#{username} where id=#{id}
+        //转换sql语句： update user set id = ? and username=? where id=? ，转换的过程中，还需要对#{}里面的值进行解析存储
+        String sql = mappedStatement.getSql();
+        BoundSql boundSql = getBoundSql(sql);
+
+        // 3.获取预处理对象：preparedStatement
+        PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSqlText());
+
+        // 4. 设置参数
+        //获取到了参数的全路径
+        String paramterType = mappedStatement.getParamterType();
+        Class<?> paramtertypeClass = getClassType(paramterType);
+
+        List<ParameterMapping> parameterMappingList = boundSql.getParameterMappingList();
+        for (int i = 0; i < parameterMappingList.size(); i++) {
+            ParameterMapping parameterMapping = parameterMappingList.get(i);
+            String content = parameterMapping.getContent();
+
+            //反射
+            Field declaredField = paramtertypeClass.getDeclaredField(content);
+            //暴力访问
+            declaredField.setAccessible(true);
+            Object o = declaredField.get(params[0]);
+
+            preparedStatement.setObject(i + 1,o);
+
+        }
+
+
+        // 5. 执行sql
+        int insert = preparedStatement.executeUpdate();
+        return insert;
+    }
+
+    @Override
+    public int delete(Configuration configuration, MappedStatement mappedStatement, Object... params) throws Exception {
+
+        // 1. 注册驱动，获取连接
+        Connection connection = configuration.getDataSource().getConnection();
+
+        // 2. 获取sql语句 : update user set id = #{id} and username=#{username} where id=#{id}
+        //转换sql语句： update user set id = ? and username=? where id=? ，转换的过程中，还需要对#{}里面的值进行解析存储
+        String sql = mappedStatement.getSql();
+        BoundSql boundSql = getBoundSql(sql);
+
+        // 3.获取预处理对象：preparedStatement
+        PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSqlText());
+
+        // 4. 设置参数
+        //获取到了参数的全路径
+        String paramterType = mappedStatement.getParamterType();
+        Class<?> paramtertypeClass = getClassType(paramterType);
+
+        List<ParameterMapping> parameterMappingList = boundSql.getParameterMappingList();
+        for (int i = 0; i < parameterMappingList.size(); i++) {
+            ParameterMapping parameterMapping = parameterMappingList.get(i);
+            String content = parameterMapping.getContent();
+
+            //反射
+            Field declaredField = paramtertypeClass.getDeclaredField(content);
+            //暴力访问
+            declaredField.setAccessible(true);
+            Object o = declaredField.get(params[0]);
+
+            preparedStatement.setObject(i + 1,o);
+
+        }
+
+        int delete = preparedStatement.executeUpdate();
+
+
+        return delete;
+    }
+
 
     private Class<?> getClassType(String paramterType) throws ClassNotFoundException {
         if(paramterType!=null){

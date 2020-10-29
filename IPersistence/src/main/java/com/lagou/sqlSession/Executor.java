@@ -11,4 +11,8 @@ public interface Executor {
 
     public int update(Configuration configuration,MappedStatement mappedStatement,Object... params) throws Exception;
 
+    public int insert(Configuration configuration,MappedStatement mappedStatement,Object... params) throws Exception;
+
+    public int delete(Configuration configuration,MappedStatement mappedStatement,Object... params) throws Exception;
+
 }

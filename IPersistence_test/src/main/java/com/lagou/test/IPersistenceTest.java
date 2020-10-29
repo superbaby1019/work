@@ -21,8 +21,9 @@ public class IPersistenceTest {
 
         //调用
         User user = new User();
-        user.setId(1);
-        user.setUsername("陈万万");
+        user.setId(7);
+//        user.setId(0);
+        user.setUsername("巩俐");
 
       /*  User user2 = sqlSession.selectOne("user.selectOne", user);
 
@@ -34,8 +35,13 @@ public class IPersistenceTest {
         }*/
 
         IUserDao userDao = sqlSession.getMapper(IUserDao.class);
-        int update = userDao.update(user);
-        System.out.println("update的值为---"+update);
+        /*int delete = userDao.delete(user);
+        System.out.println("delete操作返回值---"+delete);*/
+
+        /*int insert = userDao.insert(user);
+        System.out.println("insert操作返回值---"+insert);*/
+        /*int update = userDao.update(user);
+        System.out.println("update的值为---"+update);*/
 
 
         /*User dao = userDao.findByCondition(user);
@@ -43,10 +49,10 @@ public class IPersistenceTest {
 
 
 
-//        List<User> all = userDao.findAll();
-//        for (User user1 : all) {
-//            System.out.println(user1);
-//        }
+        List<User> all = userDao.findAll();
+        for (User user1 : all) {
+            System.out.println(user1);
+        }
 //        userDao.insert(user);
 
     }

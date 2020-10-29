@@ -25,7 +25,14 @@ public class XMLMapperBuilder {
 
         String namespace = rootElement.attributeValue("namespace");
 
-        List<Element> list = rootElement.selectNodes("//update");
+        List<Element> list = rootElement.selectNodes("//select");
+        List<Element> list2 = rootElement.selectNodes("//insert");
+        List<Element> list3 = rootElement.selectNodes("//delete");
+        List<Element> list4 = rootElement.selectNodes("//update");
+        list.addAll(list2);
+        list.addAll(list3);
+        list.addAll(list4);
+
         for (Element element : list) {
             String id = element.attributeValue("id");
             String resultType = element.attributeValue("resultType");

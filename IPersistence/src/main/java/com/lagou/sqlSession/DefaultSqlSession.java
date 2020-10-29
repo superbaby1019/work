@@ -48,6 +48,22 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
+    public int insert(String statementid, Object... params) throws Exception {
+        simpleExecutor simpleExecutor = new simpleExecutor();
+        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementid);
+        int insert = simpleExecutor.insert(configuration, mappedStatement, params);
+        return insert;
+    }
+
+    @Override
+    public int delete(String statementid, Object... params) throws Exception {
+        simpleExecutor simpleExecutor = new simpleExecutor();
+        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementid);
+        int delete = simpleExecutor.delete(configuration, mappedStatement, params);
+        return delete;
+    }
+
+    @Override
     public <T> T getMapper(Class<?> mapperClass) {
         // 使用JDK动态代理来为Dao接口生成代理对象，并返回
 
@@ -66,14 +82,22 @@ public class DefaultSqlSession implements SqlSession {
                 // 获取被调用方法的返回值类型
                 Type genericReturnType = method.getGenericReturnType();
                 // 判断是否进行了 泛型类型参数化
-                /*if(genericReturnType instanceof ParameterizedType){
+                if(genericReturnType instanceof ParameterizedType){
                     List<Object> objects = selectList(statementId, args);
                     return objects;
+                }else if(methodName=="findByCondition"){
+                    return selectOne(statementId,args);
+                }else if(methodName=="insert"){
+                    int insert = insert(statementId, args);
+                    return insert;
+                }else if(methodName=="update"){
+                    int update = update(statementId, args);
+                    return update;
+                }else if(methodName=="delete"){
+                    int delete = delete(statementId, args);
+                    return delete;
                 }
-
-                return selectOne(statementId,args);*/
-                int update = update(statementId, args);
-                return update;
+                return null;
 
             }
         });
